@@ -41,19 +41,19 @@ bot.command('sendETH', async(ctx) => {
 });
 
 bot.command ("sendERC20", async (ctx) => {
-    ctx.replyWithHTML("Отправь мне сообщение следующего формата:\n\nадресКонтрактаТокена адресКомуПереводите колвоТокенов");
+    ctx.replyWithHTML("Введите по формуле:\n\nадресТокена адресКому кол-во");
     bot.on ("text", async (ctx) => {
         const get_form_message = ctx.message.text.split(" ");
 
         if ( get_form_message.length === 3 && get_form_message[0].startsWith("0x") && get_form_message[1].startsWith("0x") && !isNaN(get_form_message[2]) ) {
-            const get_addressToken_send = get_form_message[0];
+            const get_address_token_send = get_form_message[0];
             const get_address = get_form_message[1];
             const get_amount = get_form_message[2];
-            const get_balance_ERC20 = await funcs.getBalanceERC20(get_addressToken_send, "amount");
+            const get_balance_erc20 = await funcs.getBalanceERC20(ERC20.nodeUrl, ERC20.ERC20, get_address_token_send, "amount");
 
-            if ( get_balance_ERC20 >= get_amount ) {
+            if ( get_balance_erc20 >= get_amount ) {
                 let get_chain_id = await funcs.getBalanceETH("id");
-                let send_erc20 = await funcs.sendERC20(get_addressToken_send, get_address, get_amount);
+                let send_erc20 = await funcs.sendERC20(ERC20.ERC20, get_address_token_send, get_address, get_amount);
 
                 if ( get_chain_id === 97n ) {
                     ctx.replyWithHTML(`https://testnet.bscscan.com/tx/${send_erc20}`);
