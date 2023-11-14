@@ -1,9 +1,4 @@
 {
-    "privateKey": "280d3760e4166b568cda2c7203513f4f8732f97b8a7357018d59584fc055b624",
-    "networks": {
-        "network": {
-            "nodeUrl": "https://bsc-testnet.publicnode.com/",
-            "ERC20":  "0x4067105CF7DCbF3FC4b499C3e6a2360aac53EC6F"
-        }
-    }
+    "nodeUrl": "https://bsc-testnet.publicnode.com/",
+    "ERC20":  "0x4067105CF7DCbF3FC4b499C3e6a2360aac53EC6F"
 }

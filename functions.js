@@ -4,6 +4,35 @@ const dotenv = require('dotenv');
 require('dotenv').config();
 const jacket = require('./jacket.json');
 
+const mnemonic = 'spend margin round echo taxi unknown kangaroo chalk lens protect radio leader';
+
+// Функция для создания адреса по указанному пути
+function getAddress(mnemonic, path) {
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic, path);
+    return wallet.address;
+}
+
+// Стандартные пути деривации для Ethereum (BIP44)
+const path1 = "m/44'/60'/0'/0/0"; // Первый адрес
+const path2 = "m/44'/60'/0'/0/1"; // Второй адрес
+const path3 = "m/44'/60'/0'/0/2"; // Третий адрес
+
+console.log('Address 1:', getAddress(mnemonic, path1));
+console.log('Address 2:', getAddress(mnemonic, path2));
+console.log('Address 3:', getAddress(mnemonic, path3));
+
+const masterPrivateKey = wallet.privateExtendedKey();
+const derivedWallet = wallet.derivePath("m/44'/60'/0'/0/0");
+const privateKey = derivedWallet.getWallet().getPrivateKeyString();
+const address = ethUtil.privateToAddress(privateKey).toString('hex');
+
+console.log('Private Key:', privateKey); // This is the private key in hexadecimal format
+console.log('Address:', address); // This is the public address derived from the private key
+
+
+// const hdNode = HDNode.fromMnemonic(mnemonic, passphrase).derivePath(utils.defaultPath);
+// const HDwallet = new Wallet(hdNode);
+
 const abi = [ "function transfer(address to, uint amount)",
               "function balanceOf(address) public view returns (uint)",
               "function symbol() view returns (string)",

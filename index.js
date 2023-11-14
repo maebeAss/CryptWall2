@@ -1,3 +1,5 @@
+// import '@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol';
+// import IUniswapV2Router02 from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 const { Telegraf } = require('telegraf')
 const { message } = require('telegraf/filters')
 require('dotenv').config()
