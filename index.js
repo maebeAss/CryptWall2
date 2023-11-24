@@ -5,11 +5,28 @@ const { message } = require('telegraf/filters')
 require('dotenv').config()
 const text = require('./const')
 const funcs = require("./functions.js");
-const ERC20 = require('./jacket.json');
+const { Mnemonic } = require('ethers');
+const ERC20 = (process.env.ERC20);
+const NODE_URL = (process.env.NODE_URL);
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-bot.start((ctx) => ctx.reply(`Привет ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Привет!'}!`));
-bot.help((ctx) => ctx.reply(text.commands));
+bot.start((ctx) => ctx.reply(`Привет ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Привет!'}!`))
+// bot.start((ctx) => ctx.reply('Введите свой Мнемоник'))
+// bot.on('text', (ctx) => {
+//     const mnemonic = ctx.message.text;
+// })
+
+
+// bot.hears('text', async (ctx) => {
+//     mnemonic = ctx.message.text;
+// })
+
+// const privateKey = funcs.getPrivatekeyFromMnemonic('privateKey')
+
+
+// bot.hears('text', (ctx) => {
+//     const mnemonic = ctx.message.text;
+// })
 
 bot.command('balanceETH', async (ctx) => {
     let balance_eth = await funcs.getBalanceETH("amount");
@@ -17,8 +34,8 @@ bot.command('balanceETH', async (ctx) => {
 })
 
 bot.command('balanceERC20', async(ctx) =>{
-    let balance_erc20 = await funcs.getBalanceERC20(ERC20.ERC20, "amount");
-    let balance_erc20_symbol = await funcs.getBalanceERC20(ERC20.ERC20, "symbol");
+    let balance_erc20 = await funcs.getBalanceERC20(ERC20, "amount");
+    let balance_erc20_symbol = await funcs.getBalanceERC20(ERC20, "symbol");
     ctx.reply(`${balance_erc20} ${balance_erc20_symbol}`);
 })
 
@@ -51,11 +68,11 @@ bot.command ("sendERC20", async (ctx) => {
             const get_address_token_send = get_form_message[0];
             const get_address = get_form_message[1];
             const get_amount = get_form_message[2];
-            const get_balance_erc20 = await funcs.getBalanceERC20(ERC20.nodeUrl, ERC20.ERC20, get_address_token_send, "amount");
+            const get_balance_erc20 = await funcs.getBalanceERC20(NODE_URL, ERC20, get_address_token_send, 'amount');
 
             if ( get_balance_erc20 >= get_amount ) {
                 let get_chain_id = await funcs.getBalanceETH("id");
-                let send_erc20 = await funcs.sendERC20(ERC20.ERC20, get_address_token_send, get_address, get_amount);
+                let send_erc20 = await funcs.sendERC20(ERC20, get_address_token_send, get_address, get_amount);
 
                 if ( get_chain_id === 97n ) {
                     ctx.replyWithHTML(`https://testnet.bscscan.com/tx/${send_erc20}`);
@@ -99,3 +116,4 @@ bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
+// module.exports = { privateKey };

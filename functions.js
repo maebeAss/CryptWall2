@@ -2,9 +2,20 @@ const ethers = require("ethers");
 const { parseUnits, parseEther, Contract } = require("ethers");
 const dotenv = require('dotenv');
 require('dotenv').config();
-const jacket = require('./jacket.json');
+// const mnemonic = require('./index.js')
 
-const mnemonic = 'spend margin round echo taxi unknown kangaroo chalk lens protect radio leader';
+const mnemonic = ('bottom route vault satoshi upgrade price mechanic cube girl blade bronze chronic');
+
+// function getPrivatekeyFromMnemonic() {
+//     const mnemonicWallet = ethers.Wallet.fromPhrase(mnemonic);
+//     console.log(mnemonicWallet.privateKey);
+//     const privateKey = (mnemonicWallet.privateKey);
+//     return privateKey;
+// }
+
+const mnemonicWallet = ethers.Wallet.fromPhrase(mnemonic);
+console.log(mnemonicWallet.privateKey);
+const privateKey = (mnemonicWallet.privateKey);
 
 // Функция для создания адреса по указанному пути
 function getAddress(mnemonic, path) {
@@ -13,21 +24,21 @@ function getAddress(mnemonic, path) {
 }
 
 // Стандартные пути деривации для Ethereum (BIP44)
-const path1 = "m/44'/60'/0'/0/0"; // Первый адрес
-const path2 = "m/44'/60'/0'/0/1"; // Второй адрес
-const path3 = "m/44'/60'/0'/0/2"; // Третий адрес
+// const path1 = "m/44'/60'/0'/0/0"; // Первый адрес
+// const path2 = "m/44'/60'/0'/0/1"; // Второй адрес
+// const path3 = "m/44'/60'/0'/0/2"; // Третий адрес
 
-console.log('Address 1:', getAddress(mnemonic, path1));
-console.log('Address 2:', getAddress(mnemonic, path2));
-console.log('Address 3:', getAddress(mnemonic, path3));
+// console.log('Address 1:', getAddress(mnemonic, path1));
+// console.log('Address 2:', getAddress(mnemonic, path2));
+// console.log('Address 3:', getAddress(mnemonic, path3));
 
-const masterPrivateKey = wallet.privateExtendedKey();
-const derivedWallet = wallet.derivePath("m/44'/60'/0'/0/0");
-const privateKey = derivedWallet.getWallet().getPrivateKeyString();
-const address = ethUtil.privateToAddress(privateKey).toString('hex');
+// const masterPrivateKey = wallet.privateExtendedKey();
+// const derivedWallet = wallet.derivePath("m/44'/60'/0'/0/0");
+// const privateKey = derivedWallet.getWallet().getPrivateKeyString();
+// const address = ethUtil.privateToAddress(privateKey).toString('hex');
 
-console.log('Private Key:', privateKey); // This is the private key in hexadecimal format
-console.log('Address:', address); // This is the public address derived from the private key
+// console.log('Private Key:', privateKey); // This is the private key in hexadecimal format
+// //console.log('Address:', address); // This is the public address derived from the private key
 
 
 // const hdNode = HDNode.fromMnemonic(mnemonic, passphrase).derivePath(utils.defaultPath);
@@ -38,8 +49,8 @@ const abi = [ "function transfer(address to, uint amount)",
               "function symbol() view returns (string)",
               "function name() view returns (string)" ];
 
-const provider = new ethers.JsonRpcProvider(jacket.nodeUrl); // blockchain RPC node link
-const wallet = new ethers.Wallet(jacket.privateKey, provider); // wallet private key
+const provider = new ethers.JsonRpcProvider(process.env.NODE_URL); // blockchain RPC node link
+const wallet = new ethers.Wallet(privateKey, provider); // wallet private key
 
 async function getBalanceETH(value) {
 const balanceETH = await provider.getBalance(wallet.address);
@@ -70,7 +81,7 @@ async function sendETH(addressTo, amount) {
 
 async function sendERC20( nodeUrl, addressTo, token, amountERC20 ) {
     const provider = new ethers.JsonRpcProvider(nodeUrl); 
-    const wallet = new ethers.Wallet(jacket.privateKey, provider); 
+    const wallet = new ethers.Wallet(privateKey, provider); 
     const contract = new Contract(token, abi, wallet);
     const amount = parseUnits(amountERC20, 18);
     const sendAddressTo = await contract.trans(addressTo, amount);
